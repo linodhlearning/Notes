@@ -21,7 +21,7 @@ namespace Notes.Api.Handlers
         public override async Task<GetNoteByIdResponse> HandleMessage(GetNoteByIdRequest message)
         {
             _logger.LogInformation("GetNoteHandler HandleMessage Begin");
-            var data = new List<NoteModel> {new(){Id = 11,Title = "test1",Description = "test 123"} };//todo
+            var data = new List<NoteModel> {new(){Id = message.Id, Title = "test1",Description = "test 123"} };//todo
             return await Task.FromResult(new GetNoteByIdResponse(data));
         }
     }
