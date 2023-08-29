@@ -1,0 +1,67 @@
+# ASP.NET
+# Build and test ASP.NET projects.
+# Add steps that publish symbols, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
+
+trigger:
+- main
+
+variables:
+  solutionDir: 'Notes.Api'
+  testDir: 'Notes.Api.Test'
+
+pool:
+  vmImage: 'ubuntu-latest'
+ 
+stages: 
+- stage: build_stage
+  jobs:
+  - job: 'build'
+    steps:
+    - script: pwd
+      displayName: 'what is the directory im in?'
+
+    - script: ls -la
+      displayName: 'what files are in folder?'
+
+    - script: dotnet build
+      displayName: 'dotnet build'
+      workingDirectory: $(solutionDir)
+
+    - task: DotNetCoreCLI@2
+      displayName: 'run unit tests'
+      inputs:
+        command: 'test'
+        workingDirectory: '$(testDir)'
+
+    - script: docker run --name sqlserver -e /'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Pa$$word@123' -p 1433:1433 -e 'MYSQL_PID=Standard' -d mcr.microsoft.com/mssql/server:2022-latest
+      displayName: 'start sql server container'
+
+    - script: dotnet publish -o $(build.artifactStagingDirectory)
+      displayName: 'dotnet publish -o $(build.artifactStagingDirectory)'
+      workingDirectory: $(solutionDir)
+
+    - task: PublishPipelineArtifact@1
+      inputs:
+      # targetPath:'$(pipeline.Workspace)'
+        targetPath: '$(build.artifactStagingDirectory)'
+        artifact: 'drop'
+        publishLocation: 'pipeline'
+
+- stage: deploy_to_stage
+  jobs:
+  - job: deployToAppService
+    displayName: 'deploy to azure app service'
+    steps:
+    - task: DownloadPipeLineArtifact@2
+      inputs:
+        buildType: 'current'
+        artifactName: 'drop'
+        targetPath: '$(Pipeline.Workspace)/drop'
+    - script: pwd
+      displayName: 'what is the directory im in?'
+      workingDirectory: $(Pipeline.Workspace)
+    - script: ls -la
+      displayName: 'what files are in folder?'
+      workingDirectory: $(Pipeline.Workspace)
+
