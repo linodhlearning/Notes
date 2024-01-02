@@ -5,3 +5,6 @@ Microsoft.EntityFrameworkCore.Tools
 MediatR
  
 AutoMapper.Extensions.Microsoft.DependencyInjection
+
+--Migration (Microsoft.EntityFrameworkCore.Tools added to allow PMConsole DB Migration utilities)
+Add-Migration <migrationname>
