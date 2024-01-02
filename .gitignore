@@ -272,3 +272,6 @@ __pycache__/
 # tools/
 
 # End of https://www.toptal.com/developers/gitignore/api/aspnetcore
+/.vs/Notes/v17/.suo
+/Notes.Api/bin/
+/Notes.Api/obj/
