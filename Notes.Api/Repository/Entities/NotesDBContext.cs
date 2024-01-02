@@ -11,10 +11,8 @@ namespace Notes.Api.Repository.Entities
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
-            {
-                modelBuilder.Entity(entityType.Name).Property<string>("CreatedBy");
-                modelBuilder.Entity(entityType.Name).Property<DateTimeOffset>("CreatedDate");
-                modelBuilder.Entity(entityType.Name).Property<string>("ModifiedBy");
+            { 
+                modelBuilder.Entity(entityType.Name).Property<DateTimeOffset>("CreatedDate"); 
                 modelBuilder.Entity(entityType.Name).Property<DateTimeOffset>("UpdatedDate");
             }
 
