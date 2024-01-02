@@ -1,0 +1,7 @@
+﻿
+Adding EF Core Nugets
+Microsoft.EntityFrameworkCore.SqlServer
+Microsoft.EntityFrameworkCore.Tools
+MediatR
+ 
+AutoMapper.Extensions.Microsoft.DependencyInjection
